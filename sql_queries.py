@@ -11,12 +11,12 @@ time_table_drop = "drop table if exists time;"
 songplay_table_create = ("""
     create table if not exists songplays 
     (songplay_id serial primary key,
-    start_time bigint, 
-    user_id text, 
+    start_time bigint NOT NULL, 
+    user_id text NOT NULL, 
     level text, 
     song_id text, 
     artist_id text, 
-    session_id text, 
+    session_id text NOT NULL, 
     location text,
     user_agent text);
 """)
@@ -71,7 +71,8 @@ user_table_insert = ("""
     insert into users(user_id, first_name, last_name, gender, level) 
     values(%s, %s, %s, %s, %s)
     on conflict(user_id) 
-    do nothing;
+    do update 
+        set level = excluded.level
 """)
 
 song_table_insert = ("""
